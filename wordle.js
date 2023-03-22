@@ -5,6 +5,8 @@ const words = ["libro", "ordenador", "teclado", "casa", "edificio", "elefante", 
 let selectedWord = "";
 let attempts = 6;
 let guessedLetters = [];
+let partida;
+let startTime;
 
 // Variables para acceder a los elementos del DOM
 const wordInput = document.getElementById("word-input");
@@ -53,27 +55,90 @@ function startGame() {
     selectedWord = getRandomWord();
     wordLengthValue.textContent = selectedWord.length;
     wordInput.setAttribute("maxlength", selectedWord.length);
+    // Establece el tiempo de inicio de la partida
+    startTime = new Date().getTime();
+
+    // Inicializa el objeto partida con un nombre vacío, intentos y tiempo
+    partida = {
+        nombre: "",
+        intentos: 0,
+        tiempo: 0,
+    };
 }
 
 // Evento que se ejecuta cuando se hace clic en el botón de enviar
 submitBtn.addEventListener("click", () => {
     const guess = wordInput.value.toLowerCase();
     guessedLetters = [...new Set([...guessedLetters, ...guess])];
-
+    
     // Comprueba que la longitud de la palabra del usuario es correcta
     if (guess.length !== selectedWord.length) {
         alert("Por favor, introduce una palabra con la longitud correcta.");
         return;
     }
 
+    partida.intentos++;
+
     // Si el usuario adivina la palabra, muestra un mensaje de felicitación y los fuegos artificiales
     if (guess === selectedWord) {
         showMessage("¡Felicidades! Has adivinado la palabra.");
         hints.innerText = "";
+
+        partida.tiempo = Math.round((new Date().getTime() - startTime) / 1000);
+
         showFireworks(); // Muestra los fuegos artificiales
-        setTimeout(() => {
-            startGame(); // Reinicia el juego después de adivinar la palabra.
-        }, 5000);
+        // Verificamos si la partida actual está en el top 10
+        let mejoresPartidas = JSON.parse(localStorage.getItem('mejoresPartidas')) || [];
+        let estaEnTop10 = false;
+        let indiceTop10;
+        if(mejoresPartidas.length == 0){
+            estaEnTop10 = true;
+            indiceTop10 = 0;
+        } else if(mejoresPartidas.length < 10){
+            for (let i = 0; i < mejoresPartidas.length; i++) {
+                if (partida.intentos <= mejoresPartidas[i].intentos && partida.tiempo <= mejoresPartidas[i].tiempo) {
+                    estaEnTop10 = true;
+                    indiceTop10 = i;
+                    break;
+                }
+            }
+        } else {
+            for (let i = 0; i < mejoresPartidas.length; i++) {
+                if (partida.intentos <= mejoresPartidas[i].intentos && partida.tiempo <= mejoresPartidas[i].tiempo) {
+                    estaEnTop10 = true;
+                    indiceTop10 = i;
+                    break;
+                }
+            }
+        }
+
+        // Si la partida actual está en el top 10, solicitamos al usuario que la nombre y la guarde
+        if (estaEnTop10) {
+            let nombrePartida = prompt('¡Felicitaciones! Has entrado en el top 10 de las mejores partidas. Por favor, ingresa tu nombre para guardar la partida:');
+            if (nombrePartida !== null && nombrePartida.trim() !== '') {
+
+                partida.nombre = nombrePartida;
+
+                guardarPartidaEnCache(partida);
+
+                mejoresPartidas = JSON.parse(localStorage.getItem('mejoresPartidas')) || [];
+
+                // Volvemos a mostrar el popup con la lista actualizada
+                mostrarPopUp(mejoresPartidas,indiceTop10)
+                
+               
+            } else {
+                // Volvemos a mostrar el popup con la lista actualizada
+                mostrarPopUp(mejoresPartidas, -1)
+                
+            }
+            
+        } else {
+            // Volvemos a mostrar el popup con la lista actualizada
+            mostrarPopUp(mejoresPartidas, -1)
+                
+        }
+        
     } else {
         attempts--;
 
@@ -162,6 +227,57 @@ infoBtn.addEventListener("click", () => {
 closeInfoBtn.addEventListener("click", () => {
     infoPopup.classList.add("hidden");
 });
+
+function guardarPartidaEnCache(partida) {
+    // Obtenemos la lista de partidas guardadas en el caché
+    let partidasGuardadas = JSON.parse(localStorage.getItem('mejoresPartidas')) || [];
+  
+    // Agregamos la nueva partida a la lista
+    partidasGuardadas.push({nombre: partida.nombre, intentos: partida.intentos, tiempo: partida.tiempo});
+  
+    // Ordenamos la lista por número de intentos y tiempo de partida
+    partidasGuardadas.sort((a, b) => {
+      if (a.intentos === b.intentos) {
+        return a.tiempo - b.tiempo;
+      } else {
+        return a.intentos - b.intentos;
+      }
+    });
+  
+    // Limitamos la lista a los 10 mejores registros
+    partidasGuardadas = partidasGuardadas.slice(0, 10);
+  
+    // Guardamos la lista actualizada en el caché
+    localStorage.setItem('mejoresPartidas', JSON.stringify(partidasGuardadas));
+}
+
+function mostrarPopUp(mejoresPartidas, indiceTop10){
+    let popup = document.createElement('div');
+    popup.className = 'popup mejor-partida-popup';
+    let titulo = document.createElement('h2');
+    titulo.textContent = 'Mejores Partidas';
+    let lista = document.createElement('ol');
+        for (let i = 0; i < mejoresPartidas.length; i++) {
+            let item = document.createElement('li');
+            item.textContent = `${mejoresPartidas[i].nombre}: ${mejoresPartidas[i].intentos} intentos en ${mejoresPartidas[i].tiempo} segundos`;
+            if (i === indiceTop10) {
+                item.style.color = 'goldenrod';
+            } else {
+                item.style.color = '#2e8555'
+            }
+            lista.appendChild(item);
+        }
+    popup.appendChild(titulo);
+    popup.appendChild(lista);
+    document.body.appendChild(popup);
+
+    setTimeout(function() {
+        document.body.removeChild(popup);
+        startGame();
+    }, 5000);
+}
+
+
 
 startGame(); // Inicia el juego al cargar la página.
 

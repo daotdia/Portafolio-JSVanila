@@ -50,6 +50,16 @@
             </div>
             <!-- Contenedor emergente de celebración cuando el usuario adivina la palabra -->
             <div id="celebration" class="hidden"></div>
+			<div id="popup" class="hidden mejor-partida-popup">
+				<h2>Mejores partidas</h2>
+				<ol id="partidas"></ol>
+				<form id="nueva-partida">
+				  <label for="nombre">Nombre:</label>
+				  <input type="text" id="nombre" name="nombre">
+				  <button type="submit">Guardar</button>
+				</form>
+			  </div>
+			  
         </div>
     </main>
     <!-- Carga el archivo de scripts de Wordle -->

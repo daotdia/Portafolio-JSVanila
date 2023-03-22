@@ -272,3 +272,44 @@ main {
     font-size: 1.5rem;
 }
     
+#popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 1em;
+    border: 2px solid black;
+    z-index: 1000;
+  }
+  
+  #popup.hidden {
+    display: none;
+  }
+  
+  #partidas li.current {
+    background-color: gold;
+  }
+  
+  .mejor-partida-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 600px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  #popup h2 {
+    background-color:  #1d6040;
+    color: #fff;
+    padding: 0.5rem;
+    margin: 0;
+    border-radius: 5px;
+  }
+
