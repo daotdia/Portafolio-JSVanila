@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Define la codificación del documento y el tamaño de la pantalla -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título de la página -->
+    <title>Wordle</title>
+    <!-- Carga el archivo de estilos de Wordle -->
+    <link rel="stylesheet" href="wordle.css">
+    <!-- Carga la librería de animaciones anime.js desde un CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+	<!-- Carga la fuente de íconos Material Icons desde Google Fonts -->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <!-- Título principal de la página -->
+        <h1>Wordle</h1>
+		<!-- Contenedor del mensaje que se mostrará al usuario -->
+		<div id="message" class="message-container"></div>
+    </header>
+    <main>
+        <div class="container">
+            <div class="wordle-board">
+                <div class="info-container">
+                    <!-- Muestra la longitud de la palabra a adivinar -->
+                    <p class="word-length">Longitud de la palabra: <span id="word-length-value"></span></p>
+                    <!-- Botón que muestra la información del juego -->
+                    <button id="info-btn">?</button>
+                </div>
+                <!-- Contenedor emergente de información -->
+                <div id="info-popup" class="hidden" style="position:absolute; top: 50%; left: 100%; transform: translateY(-50%);">
+					<br>
+					<!-- Información del juego para el usuario -->
+					<p>"¡Bienvenido a Wordle! Este es un juego de adivinanzas de palabras en el que tienes que adivinar una palabra seleccionada al azar. Se te mostrará la longitud de la palabra y tendrás un número limitado de intentos para adivinar la palabra. Cada vez que hagas un intento, se te informará si alguna de las letras de tu intento se encuentra en la palabra seleccionada, y si está en su posición se indicará con corchetes (si no está se indica con un guión bajo). Utiliza esta información para adivinar la palabra completa antes de agotar tus intentos. ¡Buena suerte!"</p>
+					<!-- Botón que cierra el contenedor emergente -->
+					<button id="close-info-btn" class="close-info-btn">
+						<i class="material-icons">clear</i>
+					  </button>									  
+				</div>
+                <!-- Contenedor del campo de entrada del usuario -->
+                <div class="input-container">
+                    <input type="text" id="word-input" placeholder="Introduce tu palabra">
+                    <!-- Botón para enviar la palabra del usuario -->
+                    <button id="submit-btn">Enviar</button>
+                </div>
+                <!-- Contenedor de las pistas que se mostrarán al usuario -->
+                <div id="hints" class="hints-container"></div>
+            </div>
+            <!-- Contenedor emergente de celebración cuando el usuario adivina la palabra -->
+            <div id="celebration" class="hidden"></div>
+        </div>
+    </main>
+    <!-- Carga el archivo de scripts de Wordle -->
+    <script src="wordle.js"></script>
+</body>
+</html>
