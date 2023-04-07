@@ -7,7 +7,7 @@ Cómo funciona
 
 ## Cómo funciona
 
-Wordle está construido con HTML, CSS y JavaScript. El objetivo es mostrar la capacidad del autor de crear una web estática sencilla con Javascript Vanila utilizando el DOM. 
+<strong>Wordle está construido con HTML, CSS y JavaScript. El objetivo es mostrar la capacidad del autor de crear una web estática sencilla con Javascript Vanila utilizando el DOM</strong>. 
 
 El archivo index.html define la estructura de la página, mientras que wordle.css define los estilos CSS. El archivo wordle.js contiene la lógica del juego.
 
